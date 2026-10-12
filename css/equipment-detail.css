@@ -1,0 +1,177 @@
+/* =========================================
+   STUDENT - EQUIPMENT DETAILS LAYOUT
+   Loaded only by student/equipment_detail.php, after style.css.
+
+   WHY THE PAGE WAS BROKEN
+   style.css defines .detail-card as
+       display:grid; grid-template-columns:1fr 1fr;
+   and there is NO responsive rule for .detail-card anywhere
+   (the breakpoint at style.css:2959 targets .details-card,
+   a different class used by reservation_details.php).
+
+   A grid item defaults to min-width:auto, so column 1 could
+   not shrink below the equipment photo's intrinsic width
+   (the real uploads are 600-736px square). That pushed
+   column 1 far past 1fr and squeezed .detail-info down to
+   a few pixels, which is why the equipment name wrapped
+   one letter per line, the details were clipped, and the
+   right side of the card looked empty.
+
+   THE FIX
+   minmax(0, 1fr) removes the automatic minimum so both
+   columns can shrink to their true share, and min-width:0
+   on the children lets the text wrap normally instead of
+   forcing the grid wider. A breakpoint stacks the columns
+   on smaller screens. Colours, fonts and the card design
+   are untouched - layout only.
+   ========================================= */
+
+/* ---------- Container: balanced two columns that can actually shrink ---------- */
+
+body.new-dashboard .detail-card {
+    padding: 44px;
+    gap: 48px;
+    display: grid;
+    /* minmax(0,...) = the fix for the squeezed info column */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+}
+
+/* Grid/flex children must be allowed to shrink below their content size,
+   otherwise min-width:auto reintroduces the overflow. */
+body.new-dashboard .detail-card > * {
+    min-width: 0;
+}
+
+/* ---------- Info column: consistent rhythm between every block ---------- */
+
+body.new-dashboard .detail-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.65;
+    min-width: 0;              /* stop long names forcing overflow */
+    width: 100%;
+}
+
+/* The name must read horizontally, never letter-per-letter. */
+body.new-dashboard .detail-info h2,
+body.new-dashboard .detail-info h3 {
+    overflow-wrap: break-word;
+    word-break: normal;        /* overrides the inherited break-word */
+    white-space: normal;
+    max-width: 100%;
+}
+
+body.new-dashboard .detail-info .category {
+    margin: 0 0 16px;
+    align-self: flex-start;
+}
+
+body.new-dashboard .detail-info h2 {
+    margin: 0 0 14px;
+    line-height: 1.3;
+}
+
+body.new-dashboard .detail-info h3 {
+    margin: 0 0 22px;
+    line-height: 1.2;
+}
+
+body.new-dashboard .detail-info p {
+    margin: 0 0 26px;
+    line-height: 1.75;
+}
+
+/* ---------- Owner row: pad it out so it reads as its own block ---------- */
+
+body.new-dashboard .detail-info .owner-info {
+    margin: 0 0 28px;
+    padding: 16px 18px;
+    line-height: 1.6;
+}
+
+body.new-dashboard .detail-info .owner-info strong {
+    margin-right: 8px;
+}
+
+/* ---------- Stat rows: more gap and room to breathe ---------- */
+
+body.new-dashboard .detail-stats {
+    gap: 18px;
+    padding: 26px;
+    margin-bottom: 28px;
+}
+
+body.new-dashboard .detail-stats > div {
+    padding: 4px 0;
+    line-height: 1.6;
+}
+
+body.new-dashboard .detail-stats strong {
+    margin-right: 8px;
+    display: inline-block;
+}
+
+/* ---------- Image: whole picture, correct aspect ratio, never cropped ---------- */
+
+body.new-dashboard .detail-image {
+    width: 100%;
+    height: auto;
+    min-height: 420px;
+    max-height: 520px;
+    padding: 18px;
+    box-sizing: border-box;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+}
+
+body.new-dashboard .detail-image img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;      /* preserve aspect ratio, no crop or stretch */
+    object-position: center center;
+    display: block;
+    margin: auto;
+}
+
+/* ---------- Card: align the two columns and centre the whole panel ---------- */
+
+body.new-dashboard .detail-card {
+    align-items: stretch;
+}
+
+body.new-dashboard .detail-info {
+    min-width: 0;              /* stop long names forcing overflow */
+    justify-content: center;
+}
+
+/* ---------- Responsive: stack image above details ---------- */
+
+@media (max-width: 1100px) {
+    body.new-dashboard .detail-card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 30px;
+        padding: 32px;
+    }
+
+    body.new-dashboard .detail-image {
+        min-height: 320px;
+        max-height: 380px;
+    }
+}
+
+@media (max-width: 900px) {
+    body.new-dashboard .detail-card {
+        padding: 26px;
+        gap: 28px;
+    }
+
+    body.new-dashboard .detail-image {
+        height: auto;
+        min-height: 240px;
+        max-height: 300px;
+    }
+}

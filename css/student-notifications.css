@@ -1,0 +1,243 @@
+/* =========================================
+   STUDENT NOTIFICATIONS - page-specific styles
+   Loaded only by student/notifications.php, after style.css.
+
+   Scoped to .notif-page so the shared style.css (and every Admin and
+   other Student page) is untouched. Reuses the existing KitaKits
+   colours, fonts, rounded container and blue accent.
+   ========================================= */
+
+.notif-page .notification-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+    width: 100%;
+}
+
+/* ---------- Tabs ---------- */
+
+.notif-page .notif-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.notif-page .notif-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border: 1px solid #E5E7EB;
+    background: #F8FAFC;
+    color: #64748B;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .2s, color .2s, border-color .2s;
+}
+
+.notif-page .notif-tab:hover {
+    background: #EEF2FF;
+    color: #315FD3;
+    border-color: #D6E0FF;
+}
+
+.notif-page .notif-tab.active {
+    background: #315FD3;
+    border-color: #315FD3;
+    color: #fff;
+}
+
+.notif-page .notif-tab-count {
+    display: inline-block;
+    min-width: 20px;
+    padding: 1px 7px;
+    border-radius: 20px;
+    background: #E2E8F0;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.notif-page .notif-tab.active .notif-tab-count {
+    background: rgba(255, 255, 255, .25);
+    color: #fff;
+}
+
+/* ---------- Rows ---------- */
+
+.notif-page .notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notif-page .notif-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 16px;
+    border: 1px solid #F1F5F9;
+    border-radius: 14px;
+    background: #fff;
+    transition: background .2s, border-color .2s;
+}
+
+.notif-page .notif-row:hover {
+    border-color: #E2E8F0;
+}
+
+/* Unread gets a very light blue tint plus a blue dot indicator.
+   Read rows are completely neutral. */
+.notif-page .notif-row.unread {
+    background: #F8FAFF;
+    border-color: #DBEAFE;
+}
+
+.notif-page .notif-icon {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    background: #F1F5F9;
+    color: #64748B;
+}
+
+.notif-page .notif-icon.approved  { background: #DCFCE7; color: #16A34A; }
+.notif-page .notif-icon.rejected  { background: #FEE2E2; color: #DC2626; }
+.notif-page .notif-icon.payment   { background: #DBEAFE; color: #1D4ED8; }
+.notif-page .notif-icon.overdue   { background: #FEE2E2; color: #DC2626; }
+.notif-page .notif-icon.return    { background: #EDE9FE; color: #6D28D9; }
+.notif-page .notif-icon.reminder  { background: #FEF3C7; color: #B45309; }
+.notif-page .notif-icon.completed { background: #DBEAFE; color: #1D4ED8; }
+
+.notif-page .notif-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-page .notif-msg {
+    font-size: 14px;
+    color: #1E293B;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* Unread message is slightly emphasised, read is normal weight. */
+.notif-page .notif-row.unread .notif-msg {
+    font-weight: 600;
+}
+
+.notif-page .notif-meta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.notif-page .notif-type {
+    font-weight: 600;
+    color: #94A3B8;
+}
+
+.notif-page .notif-sep {
+    color: #CBD5E1;
+}
+
+.notif-page .notif-time {
+    color: #94A3B8;
+}
+
+/* ---------- Actions ---------- */
+
+.notif-page .notif-action {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.notif-page .notif-mark {
+    padding: 8px 15px;
+    border: 1px solid #315FD3;
+    border-radius: 9px;
+    background: #EEF2FF;
+    color: #315FD3;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .2s;
+}
+
+.notif-page .notif-mark:hover {
+    background: #E0E7FF;
+}
+
+.notif-page .notif-readtag {
+    flex: 0 0 auto;
+    font-size: 12px;
+    color: #CBD5E1;
+    font-weight: 600;
+}
+
+.notif-page .notif-markall-wrap {
+    margin-top: 18px;
+    text-align: right;
+}
+
+.notif-page .notif-markall {
+    padding: 10px 20px;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    background: #F8FAFC;
+    color: #475569;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.notif-page .notif-markall:hover {
+    background: #EEF2F7;
+}
+
+.notif-page .notif-empty {
+    padding: 55px 20px;
+    text-align: center;
+    color: #94A3B8;
+    font-size: 14px;
+}
+
+.notif-page .notif-empty i {
+    display: block;
+    font-size: 36px;
+    color: #CBD5E1;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+    .notif-page .notification-box {
+        padding: 18px 16px;
+    }
+
+    .notif-page .notif-row {
+        flex-wrap: wrap;
+    }
+
+    .notif-page .notif-action,
+    .notif-page .notif-readtag {
+        width: 100%;
+        text-align: right;
+    }
+}

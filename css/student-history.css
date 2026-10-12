@@ -1,0 +1,136 @@
+/* =========================================
+   STUDENT RENTAL HISTORY - page-specific styles
+   Loaded only by student/history.php, after style.css.
+
+   Scoped to .hist-page so the shared style.css (and every Admin and
+   other Student page) is untouched. Colours, fonts, rounded container
+   and spacing reuse the existing KitaKits tokens.
+   ========================================= */
+
+.hist-page .reservation-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 10px 25px 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+    width: 100%;
+    overflow-x: auto;              /* controlled scroll, never overlaps */
+}
+
+.hist-page .reservation-box table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.hist-page .reservation-box th {
+    text-align: left;
+    padding: 18px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    border-bottom: 1px solid #EEF2F7;
+    white-space: nowrap;
+}
+
+.hist-page .reservation-box td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14px;
+    color: #1E293B;
+    vertical-align: middle;
+}
+
+.hist-page .reservation-box tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.hist-page .reservation-box tbody tr:hover {
+    background: #F8FAFC;
+}
+
+.hist-page .item-name {
+    font-weight: 700;
+    color: #1E293B;
+    font-size: 15px;
+}
+
+.hist-page .reservation-id {
+    color: #94A3B8;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.hist-page .res-dates {
+    white-space: nowrap;
+    font-size: 13.5px;
+    color: #475569;
+}
+
+.hist-page .res-dates .dash {
+    color: #CBD5E1;
+    padding: 0 5px;
+}
+
+/* ---------- Compact status badges ----------
+   Small, softly coloured pills. No solid fills and no coloured row
+   backgrounds, so the table stays calm and readable. */
+
+.hist-page .status-badge {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.hist-page .status-badge.completed { background: #DCFCE7; color: #15803D; }
+.hist-page .status-badge.ongoing   { background: #DBEAFE; color: #1D4ED8; }
+.hist-page .status-badge.approved  { background: #DBEAFE; color: #1D4ED8; }
+.hist-page .status-badge.pending   { background: #FEF3C7; color: #B45309; }
+.hist-page .status-badge.overdue   { background: #FEE2E2; color: #DC2626; }
+.hist-page .status-badge.declined,
+.hist-page .status-badge.rejected  { background: #FEE2E2; color: #DC2626; }
+.hist-page .status-badge.cancelled { background: #F1F5F9; color: #64748B; }
+.hist-page .status-badge.returned  { background: #DCFCE7; color: #15803D; }
+
+/* ---------- Condition pill ---------- */
+
+.hist-page .cond-pill {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.5;
+    background: #F1F5F9;
+    color: #64748B;
+    white-space: nowrap;
+}
+
+.hist-page .cond-pill.excellent { background: #DCFCE7; color: #15803D; }
+.hist-page .cond-pill.good      { background: #E0F2FE; color: #0369A1; }
+.hist-page .cond-pill.fair      { background: #FEF3C7; color: #B45309; }
+.hist-page .cond-pill.damaged   { background: #FEE2E2; color: #DC2626; }
+
+.hist-page .empty-row {
+    padding: 50px 20px !important;
+    text-align: center;
+    color: #94A3B8;
+}
+
+.hist-page .empty-row i {
+    display: block;
+    font-size: 36px;
+    color: #CBD5E1;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+    .hist-page .reservation-box {
+        padding: 10px 16px 20px;
+    }
+}

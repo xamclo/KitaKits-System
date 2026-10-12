@@ -1,0 +1,332 @@
+/* =========================================
+    ADMIN - RENTAL REQUEST
+    Loaded only by admin/rental_request.php, after the shared
+    admin assets. Everything is scoped to body.new-dashboard and
+    prefixed .rr- so no other page is affected.
+    Colours reuse the existing .status-badge palette from
+    style.css so the look matches the dashboard.
+    ========================================= */
+
+/* ---------- Rental request container ----------
+   The card, typography, spacing, badges and column widths are now owned
+   by the shared css/admin-tables.css (loaded last), so this file keeps
+   only the request-specific modal, toast and button colours below. The
+   old !important height cap / overflow that boxed the table in and left
+   empty space has been removed. */
+
+
+/* ---------- Payment badge (reuses the status-badge shape) ---------- */
+
+.rr-pay {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.rr-pay--paid {
+    background: #dcfce7;   /* same green as .status-badge.approved */
+    color: #16a34a;
+}
+
+.rr-pay--unpaid {
+    background: #fee2e2;   /* same red as .status-badge.cancelled */
+    color: #dc2626;
+}
+
+/* 'declined' is the value stored by the existing decline handler.
+   style.css has no rule for it, so map it onto the same red. */
+body.new-dashboard .status-badge.declined,
+body.new-dashboard .status-badge.rejected {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* ---------- Review button ---------- */
+
+.rr-review {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 9px;
+    background: #315fd3;
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.rr-review:hover {
+    background: #254eb5;
+}
+
+.rr-review:focus-visible {
+    outline: 2px solid #315fd3;
+    outline-offset: 2px;
+}
+
+/* ---------- Action button container (Review + Submit for School Witness) ----------
+   Layout is finalized in css/admin-tables.css (stacked, left-aligned). This
+   block only sets the base box; the shared file wins via body.new-dashboard. */
+
+.rr-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 150px;
+}
+
+/* Submit for School Witness button - amber so it reads as a distinct,
+   secondary action next to the primary blue Review. */
+.rr-actions .rr-review[data-school] {
+    background: #f59e0b;
+}
+
+.rr-actions .rr-review[data-school]:hover {
+    background: #d97706;
+}
+
+/* ---------- Review modal ---------- */
+
+.rr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.rr-modal.is-open {
+    display: flex;
+}
+
+.rr-modal__card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.3);
+    padding: 28px;
+    width: 100%;
+    max-width: 460px;
+    animation: rrModalIn 0.18s ease-out;
+}
+
+@keyframes rrModalIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.rr-modal__title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.rr-modal__sub {
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.rr-modal__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.rr-modal__close {
+    background: #f1f5f9;
+    border: none;
+    color: #475569;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.rr-modal__close:hover {
+    background: #e2e8f0;
+}
+
+.rr-detail {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 6px 16px;
+    margin-bottom: 20px;
+}
+
+.rr-detail__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.rr-detail__row:last-child {
+    border-bottom: none;
+}
+
+.rr-detail__label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.rr-detail__value {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: right;
+}
+
+.rr-modal__actions {
+    display: flex;
+    gap: 12px;
+}
+
+.rr-modal__actions button {
+    flex: 1;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.rr-btn--reject {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.rr-btn--reject:hover {
+    background: #fecaca;
+}
+
+.rr-btn--approve {
+    background: #22c55e;
+    color: #ffffff;
+}
+
+.rr-btn--approve:hover {
+    background: #16a34a;
+}
+
+.rr-modal__actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---------- Inline error inside the modal ---------- */
+
+.rr-alert {
+    display: none;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    border-radius: 11px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rr-alert.is-visible {
+    display: block;
+}
+
+/* ---------- Empty state ---------- */
+
+.rr-empty {
+    padding: 50px 24px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.rr-empty i {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #cbd5e1;
+}
+
+.rr-empty h3 {
+    margin: 0 0 6px;
+    color: #475569;
+    font-size: 17px;
+}
+
+.rr-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ---------- Toast ---------- */
+
+.rr-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 20px;
+    background: #ffffff;
+    border-left: 4px solid #22c55e;
+    border-radius: 12px;
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.18);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.rr-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.rr-toast i {
+    color: #22c55e;
+    font-size: 17px;
+}
+
+.rr-toast--error {
+    border-left-color: #dc2626;
+}
+
+.rr-toast--error i {
+    color: #dc2626;
+}
+
+@media (max-width: 700px) {
+    .rr-modal__card {
+        padding: 22px;
+    }
+
+    .rr-modal__actions {
+        flex-direction: column;
+    }
+}

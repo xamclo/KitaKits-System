@@ -1,0 +1,211 @@
+/* =========================================
+   STUDENT SIDEBAR - collapse / expand / persistence
+   Loaded on every Student page that includes
+   includes/sidebar_student.php.
+
+   WHY THIS FILE IS NEEDED
+   style.css sets
+       .dashboard-content { margin-left:260px !important;
+                            width:calc(100% - 260px) !important; }
+   in a later block, which overrides the .dashboard-content.expanded rule.
+   The result on every page except the Dashboard was: the sidebar shrank
+   to 80px but the content kept its 260px offset, leaving a blank gap and
+   no expansion at all.
+
+   Rather than edit the shared style.css (which the Admin pages depend
+   on), this file re-asserts the same widths for .new-dashboard bodies
+   and pairs them with a single shared toggle script.
+
+   The transition matches the existing 0.3s easing used in style.css.
+   ========================================= */
+
+.new-dashboard .side-menu {
+    width: 260px;
+    transition: width .3s ease;
+}
+
+/* Declared with !important so the collapsed width always wins, whatever
+   order the shared style.css rules are evaluated in. */
+.new-dashboard .side-menu.collapsed {
+    width: 80px !important;
+}
+
+
+/* The content follows the sidebar. Both values are re-asserted here with
+   !important so they win over the conflicting rule in style.css. */
+.new-dashboard .dashboard-content {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    transition: margin-left .3s ease, width .3s ease;
+}
+
+.new-dashboard .dashboard-content.expanded {
+    margin-left: 80px !important;
+    width: calc(100% - 80px) !important;
+}
+
+/* Collapsed sidebar: hide labels, keep icons centred and clickable. */
+.new-dashboard .side-menu.collapsed .menu-text {
+    display: none;
+}
+
+.new-dashboard .side-menu.collapsed .brand-name {
+    display: none;
+}
+
+.new-dashboard .side-menu.collapsed .brand {
+    justify-content: center;
+}
+
+.new-dashboard .side-menu.collapsed a {
+    justify-content: center;
+    padding: 14px 0;
+}
+
+.new-dashboard .side-menu.collapsed .menu-icon {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.new-dashboard .side-menu.collapsed .user-meta {
+    display: none;
+}
+
+.new-dashboard .side-menu.collapsed .user-identifier {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+
+/* The Logout link carries the same red accent as the Admin sidebar so it
+   reads as a destructive action there too. Scoped to a.logout only, so no
+   other menu item is affected. */
+.new-dashboard .side-menu a.logout {
+    color: #FFC9C9;
+}
+
+.new-dashboard .side-menu a.logout:hover {
+    background: rgba(220, 38, 38, 0.35);
+    color: #ffffff;
+}
+
+
+/* =========================================
+   LOGOUT CONFIRMATION
+
+   Same rules as the Admin dialog in
+   css/admin-sidebar.css. They are repeated
+   here (rather than sharing the file) because
+   the Student pages do not load admin-sidebar.css
+   and must not depend on it.
+
+   The dialog is hidden by default and shown by the
+   "is-open" class, which is what js/admin-sidebar.js
+   toggles on the Admin side.
+   ========================================= */
+
+.logout-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.logout-modal.is-open {
+    display: flex;
+}
+
+.logout-modal__card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.3);
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: logoutModalIn 0.18s ease-out;
+}
+
+@keyframes logoutModalIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.logout-modal__icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #FEE2E2;
+    color: #DC2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.logout-modal__title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 8px;
+}
+
+.logout-modal__text {
+    font-size: 15px;
+    color: #64748B;
+    margin-bottom: 26px;
+}
+
+.logout-modal__actions {
+    display: flex;
+    gap: 12px;
+}
+
+.logout-modal__btn {
+    flex: 1;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.logout-modal__btn--cancel {
+    background: #E5E7EB;
+    color: #334155;
+}
+
+.logout-modal__btn--cancel:hover {
+    background: #D8DEE8;
+}
+
+.logout-modal__btn--confirm {
+    background: #DC2626;
+    color: #ffffff;
+}
+
+.logout-modal__btn--confirm:hover {
+    background: #B91C1C;
+}
+
+/* Re-asserted on the body so it outranks the plain ".logout-modal" rule
+   above (which comes from style.css and is more specific than a single
+   class would be). Only the "is-open" state is forced visible, so the
+   dialog can never be stuck on screen. */
+body.new-dashboard .logout-modal {
+    display: none;
+}
+
+body.new-dashboard .logout-modal.is-open {
+    display: flex;
+}
+

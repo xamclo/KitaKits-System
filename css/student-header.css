@@ -1,0 +1,105 @@
+/* =========================================
+   STUDENT HEADER - BELL COUNTER + PROFILE AVATAR
+   Loaded only by the Student Dashboard pages that include
+   includes/student_header_actions.php.
+
+   Locally scoped under .profile-area so no other page, and no
+   Admin component, is affected. Colours reuse the existing
+   KitaKits blue (#315FD3) and greys from style.css.
+
+   The bell is a passive unread counter only: the previous
+   dropdown panel, its scroll area and its list styles have
+   been removed, so nothing can overlap or compress here.
+   ========================================= */
+
+/* ---------- Bell: icon plus a small red unread badge ----------
+
+   IMPORTANT - why these properties are restated here.
+   style.css contains:
+       .profile-area span{
+           width:45px; height:45px; border-radius:50%;
+           background:#315FD3; color:white; ...
+       }
+   The bell is a <span> inside .profile-area, so that rule applied
+   to it and painted the whole bell as a large solid blue circle.
+   The badge is a nested <span> and inherited width:45px as well,
+   which made the counter as wide as the bell itself.
+
+   So the bell must explicitly declare `background: transparent`
+   (no property of ours was fighting it before) and the badge must
+   reset `width` - min-width alone cannot shrink a 45px box. */
+
+.profile-area .sh-bell {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: transparent;   /* neutralises .profile-area span */
+    color: #1E293B;            /* normal dark icon colour */
+    font-size: 20px;
+    cursor: default;
+    transition: background .2s, color .2s;
+}
+
+/* Subtle, unobtrusive hover - a faint tint and a slight icon
+   colour shift, never a solid blue fill. */
+.profile-area .sh-bell:hover {
+    background: rgba(49, 95, 211, .08);
+    color: #315FD3;
+}
+
+/* Visible keyboard focus ring for accessibility, without the
+   solid-fill effect. */
+.profile-area .sh-bell:focus-visible {
+    outline: 2px solid #315FD3;
+    outline-offset: 2px;
+    background: transparent;
+}
+
+/* ---------- Badge: small red counter at the upper-right ---------- */
+
+.profile-area .sh-bell-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    z-index: 2;                /* sits above the icon */
+    width: auto;               /* cancels inherited width:45px */
+    min-width: 19px;
+    max-width: none;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: #EF4444;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+/* ---------- Clickable profile avatar ----------
+   Reuses the exact blue circle from style.css
+   (.profile-area span) so the look is unchanged. */
+
+.profile-area .sh-avatar-link {
+    display: inline-flex;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform .18s, box-shadow .18s;
+}
+
+.profile-area .sh-avatar-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(49, 95, 211, .35);
+}
+
+.profile-area .sh-avatar-link:focus-visible {
+    outline: 2px solid #315FD3;
+    outline-offset: 3px;
+}

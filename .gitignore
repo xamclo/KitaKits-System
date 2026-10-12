@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+node_modules/
+vendor/
+.vscode/
+*.log
+/uploads/*
+!/uploads/.gitkeep
+pw_backup.json

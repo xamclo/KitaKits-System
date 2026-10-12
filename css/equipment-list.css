@@ -1,0 +1,148 @@
+/* =========================================
+   STUDENT - EQUIPMENT LIST CARD LAYOUT
+   Loaded only by student/equipment.php, after style.css.
+
+   Scoped to .equipment-grid so the Admin equipment tables and every
+   other page keep their existing look. It only fixes the internal
+   alignment/spacing of the cards: name height, price row, quantity
+   indicator and the two action buttons. Colours and typography are
+   reused from style.css.
+   ========================================= */
+
+/* ---------- Grid: evenly spaced, responsive columns ---------- */
+
+.equipment-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+.equipment-grid .equipment-card {
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    min-width: 0;
+}
+
+/* ---------- Card body: consistent rhythm ---------- */
+
+.equipment-grid .equipment-card .category-badge {
+    align-self: flex-start;
+    margin-bottom: 10px;
+}
+
+/* Reserve two lines for the name so cards with short and long
+   equipment names stay aligned with each other. */
+.equipment-grid .equipment-card h2 {
+    font-size: 20px;
+    line-height: 1.3;
+    margin: 0 0 10px;
+    min-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.equipment-grid .equipment-card h3 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 0 10px;
+}
+
+.equipment-grid .equipment-card .available-badge {
+    margin-bottom: 16px;
+}
+
+/* ---------- Action buttons ---------- */
+
+.equipment-grid .equipment-card .equipment-actions {
+    display: flex;
+    gap: 12px;                 /* clear space between the two buttons */
+    margin-top: auto;          /* stick to the bottom of the card */
+    padding-top: 4px;
+}
+
+.equipment-grid .equipment-card .equipment-actions .details-btn,
+.equipment-grid .equipment-card .equipment-actions .reserve-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 44px;              /* identical height for both */
+    padding: 0 12px;           /* even internal padding */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;       /* never wrap "View Details" / "Reserve" */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    transition: background .2s, color .2s, border-color .2s;
+}
+
+/* View Details - light background, blue text, subtle blue border */
+.equipment-grid .equipment-card .equipment-actions .details-btn {
+    background: #fff;
+    color: #315FD3;
+    border: 1px solid #B9C8F0;
+}
+
+.equipment-grid .equipment-card .equipment-actions .details-btn:hover {
+    background: #EEF2FF;
+    border-color: #315FD3;
+}
+
+/* Reserve - existing solid blue */
+.equipment-grid .equipment-card .equipment-actions .reserve-btn {
+    background: #315FD3;
+    color: #fff;
+    border: 1px solid #315FD3;
+}
+
+.equipment-grid .equipment-card .equipment-actions .reserve-btn:hover {
+    background: #244DB0;
+    border-color: #244DB0;
+}
+
+/* ---------- Empty state ---------- */
+
+.equipment-grid .empty-equipment {
+    grid-column: 1 / -1;
+    background: #fff;
+    border-radius: 20px;
+    padding: 48px 40px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+}
+
+.equipment-grid .empty-equipment h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    color: #1E293B;
+}
+
+.equipment-grid .empty-equipment p {
+    margin: 0;
+    color: #64748B;
+    font-size: 14px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1400px) {
+    .equipment-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .equipment-grid {
+        grid-template-columns: 1fr;
+    }
+}

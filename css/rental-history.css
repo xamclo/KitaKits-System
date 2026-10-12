@@ -1,0 +1,398 @@
+/* =========================================
+    ADMIN - RENTAL HISTORY
+    Loaded only by admin/rental_history.php, after the shared assets.
+    Scoped to body.new-dashboard and prefixed .rh- so no other page is
+    affected. The status badges deliberately reuse the .status-badge
+    colours already defined in style.css:
+      .overdue (red) and .completed (blue) already exist,
+    so only the green "Returned" variant is defined here.
+    ========================================= */
+
+/* =========================================
+   TYPOGRAPHY
+   The shared admin-tables.css now owns the table typography, card,
+   spacing and badges for BOTH Rental Requests and Rental History, so
+   this file no longer forces its own sizes with !important (which had
+   prevented the shared styles from applying). Only the Rental History
+   specific status colours and the Mark Returned action remain below.
+   ========================================= */
+
+/* Status cell stacks the badge and the preserved Mark Returned action. */
+body.new-dashboard .rh-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* =========================================
+   STATUS COLOURS
+   Only the colours are set here - size, padding, radius and font are
+   left exactly as style.css defines them, so the row layout does not
+   move. The three states are given deeper, higher-contrast text tones
+   and slightly cleaner backgrounds so they read clearly at a glance:
+
+     Returned -> emerald   Ongoing -> blue   Overdue -> red
+
+   The .overdue and .completed rules already exist in style.css; they are
+   restated here scoped to body.new-dashboard so only the Rental History
+   table is affected. .ongoing uses the .completed class name for the
+   badge, which is why the same rule covers it.
+   ========================================= */
+
+body.new-dashboard .status-badge.returned {
+    background: #d1fae5;
+    color: #047857;
+}
+
+body.new-dashboard .status-badge.overdue {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+body.new-dashboard .status-badge.completed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* ---------- Dates cell ---------- */
+
+.rh-dates {
+    white-space: nowrap;
+    color: #334155;
+}
+
+.rh-dates__arrow {
+    color: #94a3b8;
+    margin: 0 6px;
+}
+
+/* ---------- Condition ---------- */
+
+.rh-cond {
+    display: inline-block;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.rh-cond--excellent { background: #dcfce7; color: #16a34a; }
+.rh-cond--good      { background: #dbeafe; color: #2563eb; }
+.rh-cond--fair      { background: #fef3c7; color: #d97706; }
+.rh-cond--damaged   { background: #fee2e2; color: #dc2626; }
+.rh-cond--none      { background: #f1f5f9; color: #64748b; }
+
+/* ---------- Mark returned button ----------
+   Solid blue primary action, sized to match the Review button so the two
+   admin tables feel consistent. Final layout lives in admin-tables.css. */
+
+.rh-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 8px;
+    background: #315fd3;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    font-style: normal;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.rh-btn:hover {
+    background: #254eb5;
+}
+
+.rh-btn:focus-visible {
+    outline: 2px solid #315fd3;
+    outline-offset: 2px;
+}
+
+.rh-btn--done {
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: default;
+}
+
+.rh-btn--done:hover {
+    background: #f1f5f9;
+}
+
+/* ---------- Return modal ---------- */
+
+.rh-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.rh-modal.is-open {
+    display: flex;
+}
+
+.rh-modal__card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.3);
+    padding: 28px;
+    width: 100%;
+    max-width: 460px;
+    animation: rhModalIn 0.18s ease-out;
+}
+
+@keyframes rhModalIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.rh-modal__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.rh-modal__title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.rh-modal__sub {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.rh-modal__close {
+    background: #f1f5f9;
+    border: none;
+    color: #475569;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.rh-modal__close:hover {
+    background: #e2e8f0;
+}
+
+.rh-modal__summary {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 6px 16px;
+    margin-bottom: 20px;
+}
+
+.rh-modal__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.rh-modal__row:last-child {
+    border-bottom: none;
+}
+
+.rh-modal__label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.rh-modal__value {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: right;
+}
+
+.rh-field {
+    margin-bottom: 16px;
+}
+
+.rh-field label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.rh-field select,
+.rh-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: #1e293b;
+    background: #ffffff;
+}
+
+.rh-field select:focus,
+.rh-field input:focus {
+    outline: none;
+    border-color: #315fd3;
+    box-shadow: 0 0 0 4px rgba(49, 95, 211, 0.12);
+}
+
+.rh-modal__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.rh-modal__actions button {
+    flex: 1;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.rh-btn--cancel {
+    background: #e5e7eb;
+    color: #334155;
+}
+
+.rh-btn--cancel:hover {
+    background: #d8dee8;
+}
+
+.rh-btn--save {
+    background: #315fd3;
+    color: #ffffff;
+}
+
+.rh-btn--save:hover {
+    background: #254eb5;
+}
+
+.rh-modal__actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---------- Inline error ---------- */
+
+.rh-alert {
+    display: none;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    border-radius: 11px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rh-alert.is-visible {
+    display: block;
+}
+
+/* ---------- Empty state ---------- */
+
+.rh-empty {
+    padding: 50px 24px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.rh-empty i {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #cbd5e1;
+}
+
+.rh-empty h3 {
+    margin: 0 0 6px;
+    color: #475569;
+    font-size: 17px;
+}
+
+.rh-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ---------- Toast ---------- */
+
+.rh-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 20px;
+    background: #ffffff;
+    border-left: 4px solid #22c55e;
+    border-radius: 12px;
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.18);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.rh-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.rh-toast i {
+    color: #22c55e;
+    font-size: 17px;
+}
+
+.rh-toast--error {
+    border-left-color: #dc2626;
+}
+
+.rh-toast--error i {
+    color: #dc2626;
+}
+
+@media (max-width: 700px) {
+    .rh-modal__card {
+        padding: 22px;
+    }
+}
+

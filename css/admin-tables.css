@@ -1,0 +1,356 @@
+/* =========================================
+   ADMIN - SHARED TABLE UI
+   Loaded by admin/manage_equipment.php, admin/rental_request.php and
+   admin/rental_history.php, AFTER their own module CSS. Everything is
+   scoped to body.new-dashboard so no other page is affected.
+
+   Purpose: one clean, readable, blue-and-white look for the Rental
+   Requests and Rental History tables - stronger typography, tidy
+   spacing, quiet status/witness indicators and a single primary action
+   button - without changing any data, permissions or workflow.
+   ========================================= */
+
+/* ---------- Page title: 28px / 700 ---------- */
+body.new-dashboard .top-header h1 {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    color: #1E293B;
+    letter-spacing: -0.2px;
+}
+
+body.new-dashboard .top-header p {
+    font-size: 14px;
+    color: #64748B;
+    margin-top: 6px;
+}
+
+/* ---------- Table card: white, subtle border, 12px corners,
+   minimal shadow, reduced padding so content is not boxed in ---------- */
+body.new-dashboard .reservation-box {
+    background: #ffffff;
+    border: 1px solid #E6EAF2;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    padding: 6px;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* The table uses the full card width; min-width is dropped so the six
+   Rental Requests columns fit at 1366px without a horizontal scrollbar.
+   Only genuinely narrow screens scroll (see the media query at the end). */
+body.new-dashboard .reservation-box table {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+    font-family: inherit;
+}
+
+/* ---------- Header row: 13px / 700, dark gray, sentence case,
+   very light gray background, left-aligned ---------- */
+body.new-dashboard .reservation-box thead th {
+    background: #F6F8FC;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #E6EAF2;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* ---------- Body cells: 14px / 500, dark text, 12px x 14px padding,
+   vertically centered, subtle row dividers ---------- */
+body.new-dashboard .reservation-box tbody td {
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    text-align: left;
+    vertical-align: middle;
+    padding: 14px 12px;
+    border-bottom: 1px solid #EEF1F6;
+}
+
+body.new-dashboard .reservation-box tbody tr:last-child td {
+    border-bottom: none;
+}
+
+body.new-dashboard .reservation-box tbody tr:hover {
+    background: #F8FAFD;
+}
+
+/* ---------- Names: 14px / 600 ---------- */
+body.new-dashboard .reservation-box .rr-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1E293B;
+}
+
+/* ---------- Two-line rental period ----------
+   "Pickup: Oct 10, 2026" / "Return: Oct 12, 2026" - each date intact. */
+body.new-dashboard .reservation-box .rr-period {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.35;
+}
+
+body.new-dashboard .reservation-box .rr-period__line {
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    white-space: nowrap;
+}
+
+body.new-dashboard .reservation-box .rr-period__label {
+    color: #64748B;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+/* ---------- Status cell: one compact badge + a quiet payment line ---------- */
+body.new-dashboard .reservation-box .rr-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+body.new-dashboard .reservation-box .rr-status__pay {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748B;
+    white-space: nowrap;
+}
+
+/* ---------- Status badges: soft background, darker text ---------- */
+body.new-dashboard .reservation-box .status-badge {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+body.new-dashboard .reservation-box .status-badge.approved  { background: #DCFCE7; color: #15803D; }
+body.new-dashboard .reservation-box .status-badge.pending   { background: #FEF3C7; color: #B45309; }
+body.new-dashboard .reservation-box .status-badge.declined,
+body.new-dashboard .reservation-box .status-badge.rejected  { background: #FEE2E2; color: #DC2626; }
+body.new-dashboard .reservation-box .status-badge.completed { background: #DBEAFE; color: #1D4ED8; }
+body.new-dashboard .reservation-box .status-badge.returned  { background: #D1FAE5; color: #047857; }
+body.new-dashboard .reservation-box .status-badge.overdue   { background: #FEE2E2; color: #B91C1C; }
+
+/* ---------- School Witness: small colored dot + readable text
+   (no large competing pill) ---------- */
+body.new-dashboard .reservation-box .rr-witness {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    white-space: nowrap;
+}
+
+body.new-dashboard .reservation-box .rr-witness__dot {
+    width: 9px;
+    height: 9px;
+    min-width: 9px;
+    border-radius: 50%;
+    background: #CBD5E1;
+}
+
+body.new-dashboard .reservation-box .rr-witness--witnessed .rr-witness__dot { background: #16A34A; }
+body.new-dashboard .reservation-box .rr-witness--pending   .rr-witness__dot { background: #D97706; }
+body.new-dashboard .reservation-box .rr-witness--none      .rr-witness__dot { background: #CBD5E1; }
+body.new-dashboard .reservation-box .rr-witness--none      { color: #94A3B8; font-weight: 500; }
+
+/* ---------- Condition (Rental History): neutral dash when missing ---------- */
+body.new-dashboard .reservation-box .rh-cond {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+body.new-dashboard .reservation-box .rh-cond--excellent { background: #DCFCE7; color: #15803D; }
+body.new-dashboard .reservation-box .rh-cond--good      { background: #DBEAFE; color: #1D4ED8; }
+body.new-dashboard .reservation-box .rh-cond--fair      { background: #FEF3C7; color: #B45309; }
+body.new-dashboard .reservation-box .rh-cond--damaged   { background: #FEE2E2; color: #DC2626; }
+body.new-dashboard .reservation-box .rh-cond--none      { background: #F1F5F9; color: #94A3B8; }
+
+/* ---------- Actions ----------
+   Solid blue is reserved for the primary Review button. 34-36px height,
+   8px corners, consistent between rows. Secondary actions live in a
+   compact More menu. */
+body.new-dashboard .reservation-box .rr-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+body.new-dashboard .reservation-box .rr-review {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+    background: #315FD3;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+body.new-dashboard .reservation-box .rr-review:hover {
+    background: #254EB5;
+}
+
+body.new-dashboard .reservation-box .rr-review:focus-visible {
+    outline: 2px solid #315FD3;
+    outline-offset: 2px;
+}
+
+/* Compact More (⋯) button - quiet, only shown when a secondary action
+   exists (Submit for School Witness). */
+body.new-dashboard .reservation-box .rr-more {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+body.new-dashboard .reservation-box .rr-more:hover {
+    background: #F1F5F9;
+    border-color: #CBD5E1;
+}
+
+/* Dropdown menu. position: fixed + JS coordinates so it is never clipped
+   by the table container overflow. */
+.rr-menu {
+    position: fixed;
+    z-index: 4000;
+    min-width: 210px;
+    background: #ffffff;
+    border: 1px solid #E6EAF2;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+    padding: 6px;
+    display: none;
+}
+
+.rr-menu.is-open {
+    display: block;
+}
+
+.rr-menu__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #334155;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: normal;
+    cursor: pointer;
+}
+
+.rr-menu__item:hover {
+    background: #F1F5F9;
+}
+
+.rr-menu__item[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* ---------- Rental Requests columns (6) ----------
+   Renter | Equipment | Rental Period | Status | School Witness | Actions
+   Widths are chosen so everything fits at 1366px with the sidebar open. */
+body.new-dashboard.rr-page .reservation-box th:nth-child(1),
+body.new-dashboard.rr-page .reservation-box td:nth-child(1) { width: 16%; }
+
+body.new-dashboard.rr-page .reservation-box th:nth-child(2),
+body.new-dashboard.rr-page .reservation-box td:nth-child(2) { width: 19%; }
+
+body.new-dashboard.rr-page .reservation-box th:nth-child(3),
+body.new-dashboard.rr-page .reservation-box td:nth-child(3) { width: 20%; }
+
+body.new-dashboard.rr-page .reservation-box th:nth-child(4),
+body.new-dashboard.rr-page .reservation-box td:nth-child(4) { width: 17%; }
+
+body.new-dashboard.rr-page .reservation-box th:nth-child(5),
+body.new-dashboard.rr-page .reservation-box td:nth-child(5) { width: 14%; }
+
+body.new-dashboard.rr-page .reservation-box th:nth-child(6),
+body.new-dashboard.rr-page .reservation-box td:nth-child(6) { width: 14%; }
+
+/* Names and equipment wrap naturally for long values. */
+body.new-dashboard.rr-page .reservation-box td:nth-child(1),
+body.new-dashboard.rr-page .reservation-box td:nth-child(2) {
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* ---------- Rental History columns (5) ----------
+   Renter | Equipment | Rental Period | Condition | Status */
+body.new-dashboard.rh-page .reservation-box th:nth-child(1),
+body.new-dashboard.rh-page .reservation-box td:nth-child(1) { width: 22%; }
+
+body.new-dashboard.rh-page .reservation-box th:nth-child(2),
+body.new-dashboard.rh-page .reservation-box td:nth-child(2) { width: 24%; }
+
+body.new-dashboard.rh-page .reservation-box th:nth-child(3),
+body.new-dashboard.rh-page .reservation-box td:nth-child(3) { width: 22%; }
+
+body.new-dashboard.rh-page .reservation-box th:nth-child(4),
+body.new-dashboard.rh-page .reservation-box td:nth-child(4) { width: 15%; }
+
+body.new-dashboard.rh-page .reservation-box th:nth-child(5),
+body.new-dashboard.rh-page .reservation-box td:nth-child(5) { width: 17%; }
+
+body.new-dashboard.rh-page .reservation-box td:nth-child(1),
+body.new-dashboard.rh-page .reservation-box td:nth-child(2) {
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* ---------- Genuinely narrow screens: allow horizontal scroll inside
+   the container instead of shrinking text or crushing columns ---------- */
+@media (max-width: 900px) {
+    body.new-dashboard .reservation-box {
+        overflow-x: auto;
+    }
+    body.new-dashboard.rr-page .reservation-box table { min-width: 720px; }
+    body.new-dashboard.rh-page .reservation-box table { min-width: 640px; }
+}

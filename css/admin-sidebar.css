@@ -1,0 +1,517 @@
+/* =========================================
+   ADMIN SIDEBAR — SINGLE SOURCE OF TRUTH
+   Loaded AFTER style.css on every admin page.
+   Every admin page uses admin/includes/sidebar.php,
+   so these rules can never drift between pages.
+
+   SCOPE: the sidebar only. Manage Equipment styles live in
+   css/manage-equipment.css, loaded by manage_equipment.php alone.
+   Nothing in this file should style other modules.
+   ========================================= */
+
+/* ---------- LAYOUT TOKENS ---------- */
+
+:root {
+    --admin-sidebar-width: 250px;
+    --admin-sidebar-collapsed: 80px;
+    --admin-sidebar-bg: #193B72;
+    --admin-sidebar-active: #315FD3;
+    --admin-sidebar-text: #E2E8F0;
+    --admin-icon-size: 18px;
+    --admin-icon-box: 22px;
+    --admin-menu-btn-box: 32px;
+    --admin-transition: 0.3s ease;
+}
+
+
+/* ---------- SIDEBAR SHELL ---------- */
+
+body.new-dashboard .side-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: var(--admin-sidebar-width);
+    background: var(--admin-sidebar-bg);
+    padding: 25px 18px;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    transition: width var(--admin-transition), padding var(--admin-transition);
+}
+
+
+/* Applied by js/admin-sidebar.js for a single frame while the saved
+   collapse state is restored, so navigating between admin pages never
+   animates the sidebar sliding open on load. */
+body.new-dashboard.sidebar-preload .side-menu,
+body.new-dashboard.sidebar-preload .dashboard-content {
+    transition: none !important;
+}
+
+
+/* ---------- HEADER / BRAND ---------- */
+/* The brand is its own bordered block so the logo reads as a real
+   product header, separated from the navigation below it. */
+
+body.new-dashboard .side-menu .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 44px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Square logo tile with the mark centred inside it. */
+body.new-dashboard .side-menu .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+body.new-dashboard .side-menu .brand-mark i {
+    font-size: 18px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--admin-sidebar-active);
+    color: #ffffff;
+}
+
+body.new-dashboard .side-menu .brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* The hamburger must always be rendered and clickable. */
+body.new-dashboard .side-menu .menu-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+    width: var(--admin-menu-btn-box);
+    height: var(--admin-menu-btn-box);
+    min-width: var(--admin-menu-btn-box);
+    flex: 0 0 var(--admin-menu-btn-box);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+body.new-dashboard .side-menu .menu-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+body.new-dashboard .side-menu .menu-btn:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+
+/* ---------- MENU LINKS ---------- */
+
+body.new-dashboard .side-menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 15px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    color: var(--admin-sidebar-text);
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+body.new-dashboard .side-menu a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+body.new-dashboard .side-menu a.active {
+    background: var(--admin-sidebar-active);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+body.new-dashboard .side-menu a.logout {
+    margin-top: auto;
+    color: #FFC9C9;
+}
+
+body.new-dashboard .side-menu a.logout:hover {
+    background: rgba(220, 38, 38, 0.35);
+    color: #ffffff;
+}
+
+body.new-dashboard .side-menu a:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+
+/* ---------- ICONS (identical size + spacing everywhere) ---------- */
+
+body.new-dashboard .side-menu .menu-icon {
+    width: var(--admin-icon-box);
+    min-width: var(--admin-icon-box);
+    flex: 0 0 var(--admin-icon-box);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--admin-icon-size);
+    line-height: 1;
+}
+
+body.new-dashboard .side-menu .menu-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ---------- PROFILE CARD ---------- */
+
+body.new-dashboard .side-menu .user-identifier {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    min-height: 66px;
+}
+
+body.new-dashboard .side-menu .user-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    flex: 0 0 42px;
+    border-radius: 50%;
+    background: var(--admin-sidebar-active);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+body.new-dashboard .side-menu .user-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+}
+
+body.new-dashboard .side-menu .user-name {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.new-dashboard .side-menu .user-role {
+    color: #AFC4E8;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   COLLAPSED STATE
+   ========================================= */
+
+body.new-dashboard .side-menu.collapsed {
+    width: var(--admin-sidebar-collapsed);
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* Collapsed rail: the KitaKits brand block is hidden entirely so only the
+   navigation icons remain. The hamburger is kept (and centred) because it
+   is the only way to expand the sidebar again. */
+body.new-dashboard .side-menu.collapsed .brand {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    min-height: 44px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+}
+
+/* Hide the logo tile + wordmark. This also overrides the blanket
+   `.side-menu.collapsed .brand span { display:none }` rule in style.css,
+   which would otherwise be the only thing hiding it. */
+body.new-dashboard .side-menu.collapsed .brand-mark {
+    display: none;
+}
+
+body.new-dashboard .side-menu.collapsed .brand-name,
+body.new-dashboard .side-menu.collapsed .user-meta,
+body.new-dashboard .side-menu.collapsed .menu-text {
+    display: none;
+}
+
+/* Every collapsed item becomes a square, evenly spaced button so the
+   icons line up on one centre axis and stay easy to click. */
+body.new-dashboard .side-menu.collapsed a {
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    height: 46px;
+    min-height: 46px;
+    padding: 0;
+    margin-bottom: 6px;
+}
+
+body.new-dashboard .side-menu.collapsed .menu-icon {
+    width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+    font-size: 19px;
+}
+
+body.new-dashboard .side-menu.collapsed .user-identifier {
+    justify-content: center;
+    padding: 10px;
+    gap: 0;
+}
+
+
+/* =========================================
+   CONTENT OFFSET
+   !important is required: style.css sets
+   .dashboard-content{margin-left:260px !important}
+   in three separate override blocks.
+   ========================================= */
+
+body.new-dashboard .dashboard-content {
+    margin-left: var(--admin-sidebar-width) !important;
+    width: calc(100% - var(--admin-sidebar-width)) !important;
+    padding: 35px !important;
+    transition: margin-left var(--admin-transition), width var(--admin-transition);
+}
+
+body.new-dashboard .dashboard-content.expanded {
+    margin-left: var(--admin-sidebar-collapsed) !important;
+    width: calc(100% - var(--admin-sidebar-collapsed)) !important;
+}
+
+
+/* =========================================
+   VIEW ALL — plain text link (no fill)
+   The old version was a solid blue button whose
+   text was unreadable. It is now a simple
+   theme-coloured text link with a subtle
+   hover/focus treatment.
+   ========================================= */
+
+body.new-dashboard .box-title a.btn-view-all,
+body.new-dashboard a.btn-view-all {
+    display: inline-block;
+    background: transparent !important;
+    color: var(--admin-sidebar-active) !important;
+    padding: 6px 2px !important;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+body.new-dashboard .box-title a.btn-view-all:hover,
+body.new-dashboard a.btn-view-all:hover,
+body.new-dashboard .box-title a.btn-view-all:focus-visible,
+body.new-dashboard a.btn-view-all:focus-visible {
+    background: transparent !important;
+    color: #254EB5 !important;
+    border-bottom-color: var(--admin-sidebar-active);
+    outline: none;
+}
+
+
+/* =========================================
+   LOGOUT CONFIRMATION MODAL
+   ========================================= */
+
+.logout-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.logout-modal.is-open {
+    display: flex;
+}
+
+.logout-modal__card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.3);
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: logoutModalIn 0.18s ease-out;
+}
+
+@keyframes logoutModalIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.logout-modal__icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #FEE2E2;
+    color: #DC2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.logout-modal__title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 8px;
+}
+
+.logout-modal__text {
+    font-size: 15px;
+    color: #64748B;
+    margin-bottom: 26px;
+}
+
+.logout-modal__actions {
+    display: flex;
+    gap: 12px;
+}
+
+.logout-modal__btn {
+    flex: 1;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.logout-modal__btn--cancel {
+    background: #E5E7EB;
+    color: #334155;
+}
+
+.logout-modal__btn--cancel:hover {
+    background: #D8DEE8;
+}
+
+.logout-modal__btn--confirm {
+    background: #DC2626;
+    color: #ffffff;
+}
+
+.logout-modal__btn--confirm:hover {
+    background: #B91C1C;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+    body.new-dashboard .side-menu {
+        width: var(--admin-sidebar-collapsed);
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    body.new-dashboard .side-menu .brand {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+    }
+
+    body.new-dashboard .side-menu .brand-mark {
+        display: none;
+    }
+
+    body.new-dashboard .side-menu a,
+    body.new-dashboard .side-menu .user-identifier {
+        justify-content: center;
+    }
+
+    body.new-dashboard .side-menu .brand-name,
+    body.new-dashboard .side-menu .user-meta,
+    body.new-dashboard .side-menu .menu-text {
+        display: none;
+    }
+
+    body.new-dashboard .side-menu a {
+        padding: 0;
+        height: 46px;
+        min-height: 46px;
+    }
+
+    body.new-dashboard .side-menu .menu-icon {
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        font-size: 19px;
+    }
+
+    body.new-dashboard .dashboard-content,
+    body.new-dashboard .dashboard-content.expanded {
+        margin-left: var(--admin-sidebar-collapsed) !important;
+        width: calc(100% - var(--admin-sidebar-collapsed)) !important;
+        padding: 20px !important;
+    }
+}
+

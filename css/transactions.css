@@ -1,0 +1,306 @@
+/* =========================================
+   ADMIN - TRANSACTIONS
+   Loaded only by admin/transactions.php, after the shared assets.
+   Scoped to body.new-dashboard and prefixed .tx- so no other page is
+   affected. The payment badges reuse the .status-badge colours that
+   already exist in style.css (green .approved / red .cancelled) so the
+   table matches the rest of the dashboard.
+   ========================================= */
+
+/* ---------- Transaction reference ---------- */
+
+.tx-ref {
+    font-weight: 800;
+    color: #1e293b;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Amount ---------- */
+
+.tx-amount {
+    font-weight: 700;
+    color: #1e293b;
+    white-space: nowrap;
+}
+
+.tx-amount small {
+    display: block;
+    font-weight: 500;
+    font-size: 11.5px;
+    color: #94a3b8;
+    text-transform: capitalize;
+}
+
+/* ---------- Payment badge ---------- */
+
+.tx-pay {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.tx-pay--paid {
+    background: #dcfce7;   /* same green as .status-badge.approved */
+    color: #16a34a;
+}
+
+.tx-pay--unpaid {
+    background: #fee2e2;   /* same red as .status-badge.cancelled */
+    color: #dc2626;
+}
+
+/* ---------- Action buttons ---------- */
+
+.tx-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 9px;
+    background: #315fd3;
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.tx-btn:hover {
+    background: #254eb5;
+}
+
+.tx-btn:focus-visible {
+    outline: 2px solid #315fd3;
+    outline-offset: 2px;
+}
+
+.tx-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.tx-btn--pay {
+    background: #22c55e;
+}
+
+.tx-btn--pay:hover {
+    background: #16a34a;
+}
+
+.tx-btn--receipt {
+    background: #315fd3;
+}
+
+/* ---------- Receipt modal ---------- */
+
+.tx-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.tx-modal.is-open {
+    display: flex;
+}
+
+.tx-modal__card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.3);
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    animation: txModalIn 0.18s ease-out;
+}
+
+@keyframes txModalIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tx-modal__title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.tx-modal__sub {
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.tx-receipt {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 6px 16px;
+    margin-bottom: 20px;
+}
+
+.tx-receipt__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.tx-receipt__row:last-child {
+    border-bottom: none;
+}
+
+.tx-receipt__label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.tx-receipt__value {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: right;
+}
+
+.tx-receipt__row--total {
+    border-top: 1px solid #e2e8f0;
+    border-bottom: none;
+    margin-top: 2px;
+    padding-top: 14px;
+}
+
+.tx-receipt__row--total .tx-receipt__label,
+.tx-receipt__row--total .tx-receipt__value {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.tx-modal__actions {
+    display: flex;
+    gap: 12px;
+}
+
+.tx-modal__actions button {
+    flex: 1;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.tx-btn--close {
+    background: #315fd3;
+    color: #ffffff;
+}
+
+.tx-btn--close:hover {
+    background: #254eb5;
+}
+
+/* ---------- Inline error ---------- */
+
+.tx-alert {
+    display: none;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    border-radius: 11px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tx-alert.is-visible {
+    display: block;
+}
+
+/* ---------- Empty state ---------- */
+
+.tx-empty {
+    padding: 50px 24px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.tx-empty i {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #cbd5e1;
+}
+
+.tx-empty h3 {
+    margin: 0 0 6px;
+    color: #475569;
+    font-size: 17px;
+}
+
+.tx-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ---------- Toast ---------- */
+
+.tx-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 20px;
+    background: #ffffff;
+    border-left: 4px solid #22c55e;
+    border-radius: 12px;
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.18);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.tx-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tx-toast i {
+    color: #22c55e;
+    font-size: 17px;
+}
+
+.tx-toast--error {
+    border-left-color: #dc2626;
+}
+
+.tx-toast--error i {
+    color: #dc2626;
+}
+
+@media (max-width: 700px) {
+    .tx-modal__card {
+        padding: 22px;
+    }
+}
+

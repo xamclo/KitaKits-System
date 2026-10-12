@@ -1,0 +1,763 @@
+/* =========================================
+   MANAGE EQUIPMENT - table, search, modals
+   Loaded ONLY by admin/manage_equipment.php, AFTER
+   admin-sidebar.css. Scoped to body.new-dashboard so
+   the dashboard, sidebar and every other module keep
+   their original styling.
+   ========================================= */
+
+/* =========================================
+   MANAGE EQUIPMENT - table, search, modals
+   Scoped to body.new-dashboard so the rest of
+   the dashboard is untouched.
+   ========================================= */
+
+.eq-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.eq-search {
+    position: relative;
+    flex: 1 1 320px;
+    max-width: 420px;
+}
+
+.eq-search__icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94A3B8;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.eq-search input {
+    width: 100%;
+    padding: 13px 16px 13px 42px;
+    border: 1px solid #E2E8F0;
+    border-radius: 999px;      /* rounded pill */
+    background: #ffffff;
+    font-size: 15px;
+    font-family: inherit;
+    color: #1E293B;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.eq-search input::placeholder {
+    color: #94A3B8;
+}
+
+.eq-search input:focus {
+    outline: none;
+    border-color: var(--admin-sidebar-active);
+    box-shadow: 0 0 0 4px rgba(49, 95, 211, 0.12);
+}
+
+.eq-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 24px;
+    background: var(--admin-sidebar-active);
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.eq-add-btn:hover {
+    background: #254EB5;
+    transform: translateY(-1px);
+}
+
+
+/* ---------- TABLE ---------- */
+
+.eq-table-wrap {
+    background: #ffffff;
+    border: 1px solid #EEF2F7;
+    border-radius: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.eq-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+}
+
+.eq-table thead th {
+    background: #F8FAFC;
+    padding: 15px 18px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #64748B;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+.eq-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14.5px;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.eq-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.eq-table tbody tr:hover {
+    background: #FAFBFF;
+}
+
+/* ---------- Column layout ----------
+   Photo | Equipment | Category | Price | Condition | Availability | Action
+   Equipment gets the most room; dates/badges/buttons keep their space. */
+.eq-table th:nth-child(1),
+.eq-table td:nth-child(1) { width: 72px; }
+
+.eq-table th:nth-child(2),
+.eq-table td:nth-child(2) { min-width: 220px; }
+
+.eq-table th:nth-child(3),
+.eq-table td:nth-child(3) { width: 130px; }
+
+.eq-table th:nth-child(4),
+.eq-table td:nth-child(4) { width: 120px; }
+
+.eq-table th:nth-child(5),
+.eq-table td:nth-child(5) { width: 120px; }
+
+.eq-table th:nth-child(6),
+.eq-table td:nth-child(6) { width: 110px; text-align: center; }
+
+.eq-table th:nth-child(7),
+.eq-table td:nth-child(7) { width: 150px; }
+
+/* Photo cell */
+.eq-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: contain;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFC;
+    display: block;
+}
+
+.eq-thumb--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94A3B8;
+    font-size: 18px;
+}
+
+/* Name + description */
+.eq-name {
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.eq-asset-code {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94A3B8;
+    margin-top: 2px;
+    letter-spacing: 0.2px;
+}
+
+.eq-desc {
+    font-size: 12.5px;
+    color: #94A3B8;
+    margin-top: 3px;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Category pill */
+.eq-pill {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #EEF2FF;
+    color: #3730A3;
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Price */
+.eq-price {
+    font-weight: 700;
+    color: #1E293B;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Condition badge */
+.eq-cond {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.eq-cond--excellent { background: #DCFCE7; color: #15803D; }
+.eq-cond--good      { background: #DBEAFE; color: #1D4ED8; }
+.eq-cond--fair      { background: #FEF3C7; color: #B45309; }
+.eq-cond--poor      { background: #FEE2E2; color: #B91C1C; }
+.eq-cond--none      { background: #F1F5F9; color: #64748B; }
+
+/* Availability - neutral for a positive count, clear warning for zero. */
+.eq-avail {
+    display: inline-block;
+    min-width: 28px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.eq-avail--none {
+    color: #B91C1C;
+}
+
+.eq-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.eq-btn {
+    padding: 8px 15px;
+    border-radius: 9px;
+    font-size: 13.5px;
+    font-weight: 700;
+    font-family: inherit;
+    font-style: normal;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.eq-btn--edit {
+    background: #EEF2FF;
+    color: #315FD3;
+    border-color: #DBE4FF;
+}
+
+.eq-btn--edit:hover {
+    background: #315FD3;
+    color: #ffffff;
+    border-color: #315FD3;
+}
+
+.eq-btn--delete {
+    background: #FEE2E2;
+    color: #DC2626;
+    border-color: #FECACA;
+}
+
+.eq-btn--delete:hover {
+    background: #DC2626;
+    color: #ffffff;
+    border-color: #DC2626;
+}
+
+/* Empty state */
+.eq-empty {
+    padding: 60px 24px;
+    text-align: center;
+    color: #94A3B8;
+}
+
+.eq-empty i {
+    font-size: 34px;
+    margin-bottom: 14px;
+    color: #CBD5E1;
+}
+
+.eq-empty h3 {
+    margin: 0 0 6px;
+    color: #475569;
+    font-size: 17px;
+}
+
+.eq-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Result count */
+.eq-count {
+    margin: 0 0 12px;
+    font-size: 13.5px;
+    color: #64748B;
+}
+
+
+/* =========================================
+   ADD / EDIT MODAL
+   ========================================= */
+
+.eq-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px 20px;
+    background: rgba(15, 23, 42, 0.55);
+    overflow-y: auto;
+}
+
+.eq-modal.is-open {
+    display: flex;
+}
+
+.eq-modal__card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.3);
+    width: 100%;
+    max-width: 720px;
+    padding: 30px;
+    margin: auto;
+    animation: eqModalIn 0.18s ease-out;
+
+    /* Keep the whole card inside the viewport. The form body scrolls
+       internally, so the header and the Cancel / Save buttons stay
+       visible even when the high-value fields expand the form. The card
+       width is fixed, so toggling the checkbox never changes its width. */
+    max-height: calc(100vh - 72px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header and the alert banner never scroll away. */
+.eq-modal__head { flex: 0 0 auto; }
+.eq-modal__card > .eq-alert { flex: 0 0 auto; }
+
+/* The form fills the remaining height and stacks header-body + actions. */
+.eq-modal__card form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1 1 auto;
+}
+
+/* Only the field grid scrolls. scrollbar-gutter reserves the scrollbar
+   space so the layout does not shift when it appears/disappears. */
+.eq-form-grid {
+    overflow-y: auto;
+    min-height: 0;
+    flex: 1 1 auto;
+    scrollbar-gutter: stable;
+    padding-right: 4px;
+}
+
+/* Action buttons stay pinned to the bottom of the card. */
+.eq-modal__actions { flex: 0 0 auto; }
+
+@keyframes eqModalIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.eq-modal__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.eq-modal__title {
+    margin: 0 0 4px;
+    font-size: 21px;
+    font-weight: 800;
+    color: #1E293B;
+}
+
+.eq-modal__sub {
+    margin: 0;
+    font-size: 14px;
+    color: #64748B;
+}
+
+.eq-modal__close {
+    background: #F1F5F9;
+    border: none;
+    color: #475569;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.eq-modal__close:hover {
+    background: #E2E8F0;
+    color: #1E293B;
+}
+
+/* Two-column form */
+.eq-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.eq-field--full {
+    grid-column: 1 / -1;
+}
+
+.eq-field label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.eq-field input,
+.eq-field select,
+.eq-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 11px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: #1E293B;
+    background: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.eq-field textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.eq-field input:focus,
+.eq-field select:focus,
+.eq-field textarea:focus {
+    outline: none;
+    border-color: var(--admin-sidebar-active);
+    box-shadow: 0 0 0 4px rgba(49, 95, 211, 0.12);
+}
+
+.eq-field__hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: #94A3B8;
+}
+
+/* Photo upload */
+.eq-upload {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border: 2px dashed #CBD5E1;
+    border-radius: 14px;
+    background: #F8FAFC;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.eq-upload:hover {
+    border-color: var(--admin-sidebar-active);
+    background: #F5F7FF;
+}
+
+.eq-upload__preview {
+    width: 74px;
+    height: 74px;
+    min-width: 74px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid #E2E8F0;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94A3B8;
+    font-size: 22px;
+    overflow: hidden;
+}
+
+.eq-upload__preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.eq-upload__body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.eq-upload__body strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14.5px;
+    color: #1E293B;
+}
+
+.eq-upload__body small {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 12.5px;
+    color: #94A3B8;
+}
+
+.eq-upload input[type="file"] {
+    font-size: 13px;
+    color: #64748B;
+    max-width: 100%;
+}
+
+.eq-modal__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.eq-modal__actions .eq-btn {
+    flex: 1;
+    padding: 13px 18px;
+    font-size: 15px;
+    border-radius: 12px;
+}
+
+.eq-btn--ghost {
+    background: #E5E7EB;
+    color: #334155;
+}
+
+.eq-btn--ghost:hover {
+    background: #D8DEE8;
+}
+
+.eq-btn--primary {
+    background: var(--admin-sidebar-active);
+    color: #ffffff;
+}
+
+.eq-btn--primary:hover {
+    background: #254EB5;
+}
+
+.eq-btn--primary:disabled,
+.eq-btn--primary[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---- High-value checkbox (clickable ONLY on the checkbox itself) ----
+   The control is wrapped in its own <label> so the browser only toggles
+   when the checkbox (or its box) is clicked. The caption <span> sits
+   outside any label, so clicking the text never flips the checkbox. */
+.eq-check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
+}
+
+.eq-check__control {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.eq-check__control input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #4a7dff;
+    cursor: pointer;
+    flex: none;
+}
+
+.eq-check__text {
+    cursor: default;
+    user-select: text;
+}
+
+/* ---- High-value required-fields section ---- */
+.eq-hv-fields {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background: #F8FAFC;
+}
+
+.eq-hv-fields__title {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.eq-hv-fields__hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.eq-field__req {
+    color: #DC2626;
+    font-weight: 800;
+}
+
+.eq-field--error input,
+.eq-field--error select,
+.eq-field--error textarea {
+    border-color: #FCA5A5;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10);
+}
+
+.eq-field__error {
+    display: block;
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: #B91C1C;
+    font-weight: 600;
+}
+
+/* ---- Description character counter ---- */
+.eq-field__counter {
+    display: block;
+    text-align: right;
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #94A3B8;
+    transition: color 0.15s ease;
+}
+
+.eq-field__counter.is-near-limit {
+    color: #B45309;
+}
+
+.eq-field__counter.is-over-limit {
+    color: #B91C1C;
+}
+
+/* Asset code field hidden (auto-generated) */
+.eq-field--hidden {
+    display: none;
+}
+
+/* Inline error / success banner in the modal */
+.eq-alert {
+    display: none;
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.eq-alert.is-visible {
+    display: block;
+}
+
+.eq-alert--error {
+    background: #FEE2E2;
+    color: #B91C1C;
+}
+
+.eq-alert--success {
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+/* Toast shown on the page after a successful action */
+.eq-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 20px;
+    background: #ffffff;
+    border-left: 4px solid #22C55E;
+    border-radius: 12px;
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.18);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1E293B;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.eq-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.eq-toast i {
+    color: #22C55E;
+    font-size: 17px;
+}
+
+.eq-toast--error {
+    border-left-color: #DC2626;
+}
+
+.eq-toast--error i {
+    color: #DC2626;
+}
+
+@media (max-width: 640px) {
+    .eq-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .eq-modal__card {
+        padding: 22px;
+    }
+}
+

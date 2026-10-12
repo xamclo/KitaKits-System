@@ -1,0 +1,131 @@
+/* =========================================
+   STUDENT DASHBOARD - SIDEBAR BRANDING
+   Loaded only by student/dashboard.php.
+
+   Purpose: make the student sidebar brand look identical to the Admin
+   Dashboard brand (logo tile + wordmark beside the hamburger).
+
+   These rules are copied from the brand block in css/admin-sidebar.css
+   so the two sidebars stay visually identical. The admin file is NOT
+   loaded on student pages, so the variables it defines are not
+   available here - the one colour that is used is written literally
+   (#315FD3 = --admin-sidebar-active).
+
+   Deliberately NOT included: the admin "collapsed" rules that hide the
+   logo. The student sidebar has no collapse script, so the brand must
+   stay visible at all times.
+   ========================================= */
+
+body.new-dashboard .side-menu .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 44px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body.new-dashboard .side-menu .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+/* The logo tile: same 34px rounded square, same blue, same glyph. */
+body.new-dashboard .side-menu .brand-mark i {
+    font-size: 18px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #315FD3;
+    color: #ffffff;
+}
+
+body.new-dashboard .side-menu .brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Same button metrics as the admin hamburger. */
+body.new-dashboard .side-menu .menu-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    flex: 0 0 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border-radius: 8px;
+    font-size: 20px;
+    transition: background 0.2s ease;
+}
+
+body.new-dashboard .side-menu .menu-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+
+/* =========================================
+   CONTENT OFFSET WHEN THE SIDEBAR COLLAPSES
+   Mirrors the admin rule in admin-sidebar.css.
+
+   style.css sets `.dashboard-content { width: calc(100% - 260px) !important }`
+   and `.dashboard-content.expanded { margin-left: 85px }` with NO width, so
+   collapsing the sidebar moved the content left but left its width locked
+   to the 260px layout - leaving ~175px of dead space on the right.
+
+   Restating both states here fixes the width, so tables, cards and forms
+   grow into the space the sidebar just gave back. The sidebar is 260px
+   open and 80px collapsed, so those are the two offsets used.
+   ========================================= */
+
+body.new-dashboard .dashboard-content {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+body.new-dashboard .dashboard-content.expanded {
+    margin-left: 80px !important;
+    width: calc(100% - 80px) !important;
+}
+
+
+/* =========================================
+   COLLAPSED STATE
+   Mirrors the admin collapsed brand rules.
+
+   This block is required because style.css hides the brand with
+   `.side-menu.collapsed .brand span { display:none }`, but the
+   `.brand-mark` rule above has equal specificity (0,3,1) and this
+   file loads afterwards, so `display:flex` was winning and the logo
+   stayed visible while the sidebar was collapsed. Restating the rule
+   with the `.collapsed` class raises it to (0,4,0) and wins.
+   ========================================= */
+
+body.new-dashboard .side-menu.collapsed .brand {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+}
+
+/* Hide the logo tile and the "KitaKits" wordmark together. */
+body.new-dashboard .side-menu.collapsed .brand-mark,
+body.new-dashboard .side-menu.collapsed .brand-name {
+    display: none;
+}

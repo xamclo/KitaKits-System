@@ -1,0 +1,197 @@
+/* =========================================
+   STUDENT - RESERVE EQUIPMENT FORM LAYOUT
+   Loaded only by student/reservation.php.
+
+   Scoped to body.reservation-page, because .reservation-card is
+   ALSO used by student/reservations.php (the list page with the
+   table). Nothing here may affect that page.
+
+   WHY IT LOOKED BROKEN
+   style.css sets .reservation-card{width:600px}. A fixed pixel
+   width does not adapt, so on narrower viewports the card and
+   its 100%-wide inputs overflow the dashboard content area.
+   The equipment strip (.reservation-product) also had no
+   min-width:0, letting the long equipment name push the row
+   apart, and the form fields had no shared spacing rhythm.
+
+   THE FIX
+   A fluid width with a max-width, min-width:0 on the flex row,
+   and consistent label/input spacing. Fields, ids, names and the
+   existing JS/validation are untouched - layout only.
+   ========================================= */
+
+/* ---------- Card: fluid width, never wider than the viewport ---------- */
+
+body.reservation-page .reservation-card {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+/* ---------- Equipment strip: image + name/price ---------- */
+
+body.reservation-page .reservation-product {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 26px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #F1F5F9;
+    min-width: 0;
+}
+
+/* The row's text side must be allowed to shrink, otherwise a long
+   equipment name widens the row and squashes the image. */
+body.reservation-page .reservation-product > div {
+    min-width: 0;
+}
+
+body.reservation-page .reservation-product .product-image {
+    flex: 0 0 90px;
+    width: 90px;
+    height: 90px;
+    border-radius: 15px;
+    background: #F1F5F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+body.reservation-page .reservation-product .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   /* whole picture, correct aspect ratio */
+}
+
+body.reservation-page .reservation-product h2 {
+    font-size: 20px;
+    color: #1E293B;
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+body.reservation-page .reservation-product p {
+    color: #64748B;
+    font-size: 14px;
+}
+
+/* ---------- Form fields: labels above inputs, even rhythm ---------- */
+
+body.reservation-page .reservation-card form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Every field gets the same top spacing, and the first one starts
+   flush under the equipment strip. */
+body.reservation-page .reservation-card label {
+    display: block;
+    margin: 18px 0 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1E293B;
+}
+
+body.reservation-page .reservation-card label:first-of-type {
+    margin-top: 0;
+}
+
+body.reservation-page .reservation-card input,
+body.reservation-page .reservation-card textarea {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;          /* inputs never overflow their parent */
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1E293B;
+    outline: none;
+}
+
+body.reservation-page .reservation-card input:focus,
+body.reservation-page .reservation-card textarea:focus {
+    border-color: #315FD3;
+}
+
+body.reservation-page .reservation-card textarea {
+    height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+/* ---------- Total amount: clearly readable ---------- */
+
+body.reservation-page .reservation-card .total-box {
+    margin-top: 24px;
+    padding: 20px;
+    background: #F8FAFC;
+    border-radius: 15px;
+    text-align: center;
+}
+
+body.reservation-page .reservation-card .total-box p {
+    color: #64748B;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+body.reservation-page .reservation-card .total-box h2 {
+    font-size: 15px;
+    color: #64748B;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+body.reservation-page .reservation-card .total-box h1 {
+    font-size: 30px;
+    color: #315FD3;
+    font-weight: 700;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+/* ---------- Submit button ---------- */
+
+body.reservation-page .reservation-card .submit-reservation {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #315FD3;
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+body.reservation-page .reservation-card .submit-reservation:hover {
+    background: #254EB5;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 700px) {
+    body.reservation-page .reservation-card {
+        padding: 22px 18px;
+        max-width: 100%;
+    }
+
+    body.reservation-page .reservation-product {
+        gap: 14px;
+        margin-bottom: 20px;
+        padding-bottom: 18px;
+    }
+}
